@@ -8,11 +8,11 @@
 
 (function() {
     'use strict';
-    const header = document.querySelector('.quickstock-table.np-table thead th');
-    if(header) {
-        header.style.padding = "5px";
-        header.style.fontFamily = "Museo Sans Rounded";
-        header.style.fontSize = "16px";
+    const headerTitles = document.querySelectorAll('.quickstock-table.np-table thead th');
+    headerTitles.forEach((headerTitle) => {
+        headerTitle.style.padding = "5px";
+        headerTitle.style.fontFamily = "Museo Sans Rounded";
+        headerTitle.style.fontSize = "16px";
     });
 
     const items = document.querySelectorAll('.quickstock-table.np-table tbody td');
