@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Neopets Quickstock Style Adjuster
-// @version      v1.2.0
+// @version      v2.0   
 // @description  Modifies the styles on the latest Neopets Quickstock page to make it easier to use.
 // @author       Danny
 // @match        https://www.neopets.com/quickstock.phtml*
