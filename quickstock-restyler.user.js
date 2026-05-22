@@ -10,66 +10,61 @@
     'use strict';
 
     const timeout = 1500;
+    const quickStockTableSelector = '.quickstock-table-container';
     const headerSelector = '.quickstock-table thead tr th';
     const itemSelector = '.quickstock-table tbody tr td';
     const unstackIconSelector = '.unstack-icon';
     const perPageDropdownSelector = '#qs-per-page-select';
 
-    setTimeout(() => {
-        const unstackIcon = document.querySelector(unstackIconSelector);
-        const perPageDropdown = document.querySelector(perPageDropdownSelector);
+    function waitForTable() {
+        return new Promise(resolve => {
+            if (document.querySelector(quickStockTableSelector)) {
+                return resolve(document.querySelector(quickStockTableSelector));
+            }
 
-        function getHeaderTitles() {
-            return document.querySelectorAll(headerSelector);
-        }
-
-        function getItems() {
-            return document.querySelectorAll(itemSelector);
-        }
-
-        function styleItemRows(items) {
-            items.forEach((item) => {
-                item.style.padding = "5px";
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(quickStockTableSelector)) {
+                    observer.disconnect();
+                    resolve(document.querySelector(quickStockTableSelector));
+                }
             });
-        }
 
-        function styleHeaderRow(headerTitles) {
-            headerTitles.forEach((headerTitle) => {
-                headerTitle.style.padding = "5px";
-                headerTitle.style.fontFamily = "Museo Sans Rounded";
-                headerTitle.style.fontSize = "16px";
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
             });
-        }
+        });
+    }
 
-        const headerTitles = getHeaderTitles();
-        const items = getItems();
-
-        styleHeaderRow(headerTitles);
-
-        items.forEach((item) => {
-            item.style.padding = "5px";
+    function styleTable() {
+        document.querySelectorAll(headerSelector).forEach(header => {
+            header.style.padding = "5px";
+            header.style.fontFamily = "Museo Sans Rounded";
+            header.style.fontSize = "16px";
         });
 
-        if (unstackIcon) {
-            unstackIcon.addEventListener('click', () => {
-                setTimeout(() => {
-                    const newItems = document.querySelectorAll(itemSelector);
-                    const newHeaderTitles = document.querySelectorAll(headerSelector);
-                    styleHeaderRow(newHeaderTitles);
-                    styleItemRows(newItems);
-                }, timeout);
-            });
-        }
+        document.querySelectorAll(itemSelector).forEach(item => {
+            item.style.padding = "5px";
+        });
+    }
 
-        if (perPageDropdown) {
-            perPageDropdown.addEventListener('change', () => {
-                setTimeout(() => {
-                    const newPageItems = getItems();
-                    const newPageHeaderTitles = getHeaderTitles();
-                    styleHeaderRow(newPageHeaderTitles);
-                    styleItemRows(newPageItems);
-                }, timeout);
-            });
-        }
-    }, timeout);
+
+    function bindEventListeners() {
+        document.querySelector(unstackIconSelector)?.addEventListener('click', () => {    
+            init();
+        });
+
+        document.querySelector(perPageDropdownSelector)?.addEventListener('change', () => {
+            init();
+        });        
+    }
+
+    function init() {
+        waitForTable().then(() => {
+            styleTable();
+            bindEventListeners();
+        })
+    }; 
+
+    init();
 })();
