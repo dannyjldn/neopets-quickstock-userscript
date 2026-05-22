@@ -9,31 +9,44 @@
 (function() {
     'use strict';
 
-    const timeout = 1500;
-    const quickStockTableSelector = '.quickstock-table-container';
+    const quickStockTableSelector = '#quickstock-table-container';
     const headerSelector = '.quickstock-table thead tr th';
     const itemSelector = '.quickstock-table tbody tr td';
-    const unstackIconSelector = '.unstack-icon';
+    const clickableElements = ['.unstack-icon', '.stack-icon', '.az-icon', '.time-icon', '.inv-nc-icon', '.inv-np-icon',];
     const perPageDropdownSelector = '#qs-per-page-select';
 
     function waitForTable() {
-        return new Promise(resolve => {
-            if (document.querySelector(quickStockTableSelector)) {
-                return resolve(document.querySelector(quickStockTableSelector));
-            }
-
-            const observer = new MutationObserver(mutations => {
-                if (document.querySelector(quickStockTableSelector)) {
+        return new Promise((resolve) => {
+            const observer = new MutationObserver((mutations, observer) => {
+                const element = document.querySelector(quickStockTableSelector);
+                if (element) {
                     observer.disconnect();
-                    resolve(document.querySelector(quickStockTableSelector));
+                    resolve(element);
                 }
             });
 
             observer.observe(document.body, {
                 childList: true,
-                subtree: true
+                subtree: true,
             });
-        });
+        });    
+    }
+
+    function waitForPopup() {
+        return new Promise((resolve) => {
+            const observer = new MutationObserver((mutations, observer) => {
+                const element = document.querySelector('#commonMessagePopup');
+                if (element) {
+                    observer.disconnect();
+                    resolve(element);
+                }
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        });    
     }
 
     function styleTable() {
@@ -50,20 +63,29 @@
 
 
     function bindEventListeners() {
-        document.querySelector(unstackIconSelector)?.addEventListener('click', () => {    
-            init();
+        clickableElements.forEach(selector => {
+            document.querySelector(selector)?.addEventListener('click', () => {    
+                init();
+            });
         });
 
         document.querySelector(perPageDropdownSelector)?.addEventListener('change', () => {
             init();
         });        
     }
+    
 
     function init() {
         waitForTable().then(() => {
             styleTable();
             bindEventListeners();
         })
+        waitForPopup().then(() => {
+            waitForTable().then(() => {
+                styleTable();
+                bindEventListeners();
+            })
+        });
     }; 
 
     init();
