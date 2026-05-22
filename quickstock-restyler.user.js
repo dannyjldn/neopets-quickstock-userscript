@@ -12,7 +12,7 @@
     const quickStockTableSelector = '#quickstock-table-container';
     const headerSelector = '.quickstock-table thead tr th';
     const itemSelector = '.quickstock-table tbody tr td';
-    const clickableElements = ['.unstack-icon', '.stack-icon', '.az-icon', '.time-icon', '.inv-nc-icon', '.inv-np-icon',];
+    const clickableElements = ['.unstack-icon', '.stack-icon', '.az-icon', '.time-icon', '.inv-nc-icon', '.inv-np-icon','#commonMessagePopupOkButton'];
     const perPageDropdownSelector = '#qs-per-page-select';
 
     function waitForTable() {
