@@ -40,7 +40,6 @@ To run this userscript, you’ll need a userscript manager extension:
 
 1. Navigate to the quickstock page
 2. The script will run automatically
-3. Sometimes Neopets can be a little slow so the ascript tries to execute before the quickstock page has loaded. If this is the case, edit the script and increase the value of the timeout.
 
 ---
 
